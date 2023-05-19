@@ -4,6 +4,7 @@ const items = [{
         tags: ["boy", "girl"],
         price: 50,
         img: "./img/1.jpg",
+        rating: 4.5,
     },
     {
         title: "Набор ложка и вилка",
@@ -11,6 +12,7 @@ const items = [{
         tags: ["boy", "girl"],
         price: 30,
         img: "./img/2.jpg",
+        rating: 4.6,
     },
     {
         title: "Нагрудник",
@@ -18,6 +20,7 @@ const items = [{
         tags: ["boy", "girl"],
         price: 35,
         img: "./img/3.jpg",
+        rating: 4.5,
     },
     {
         title: "Пирамидка",
@@ -32,6 +35,7 @@ const items = [{
         tags: ["boy", "girl"],
         price: 45,
         img: "./img/5.jpg",
+        rating: 4.9,
     },
     {
         title: "Муслиновое одеяло",
@@ -39,6 +43,7 @@ const items = [{
         tags: ["boy", "girl"],
         price: 75,
         img: "./img/6.jpg",
+        rating: 4.7,
     },
     {
         title: "Пустышка Bibs",
@@ -46,6 +51,7 @@ const items = [{
         tags: ["boy", "girl"],
         price: 27,
         img: "./img/7.jpeg",
+        rating: 4.8,
     },
     {
         title: "Набор шарф и снуд",
@@ -53,6 +59,7 @@ const items = [{
         tags: ["boy", "girl"],
         price: 45,
         img: "./img/8.jpg",
+        rating: 4.8,
     },
     {
         title: "Силиконовая тарелка с секциями",
@@ -60,6 +67,7 @@ const items = [{
         tags: ["boy", "girl"],
         price: 45,
         img: "./img/9.jpg",
+        rating: 4.9,
     }
 ];
 
@@ -70,7 +78,7 @@ const itemTemplate = document.querySelector("#item-template");
 const nothingFound = document.querySelector("#nothing-found");
 
 function cardShopItem(shopItem) {
-    const { title, description, tags, img, price } = shopItem;
+    const { title, description, tags, img, price, rating } = shopItem;
 
     const item = itemTemplate.content.cloneNode(true);
 
@@ -78,6 +86,13 @@ function cardShopItem(shopItem) {
     item.querySelector("p").textContent = description;
     item.querySelector("img").src = img;
     item.querySelector(".price").textContent = `${price}P`;
+
+    const ratingContainer = item.querySelector(".rating");
+    for (let i = 0; i < rating; i++) {
+        const star = document.createElement("i");
+        star.classList.add("fa", "fa-star");
+        ratingContainer.append(star);
+    }
 
     const tagsHolder = item.querySelector(".tags");
 
@@ -91,7 +106,7 @@ function cardShopItem(shopItem) {
     return item;
 }
 
-function separationItems(arr) {
+function separateItems(arr) {
     nothingFound.textContent = "";
     itemsContainer.innerHTML = "";
 
@@ -113,7 +128,7 @@ function sortByAlphabet(a, b) {
     return 0;
 }
 
-separationItems(currentState.sort((a, b) => sortByAlphabet(a, b)));
+separateItems(currentState.sort((a, b) => sortByAlphabet(a, b)));
 
 
 const searchInput = document.querySelector("#search-input");
@@ -128,7 +143,7 @@ function applySearch() {
 
     currentState.sort((a, b) => sortByAlphabet(a, b));
 
-    separationItems(currentState);
+    separateItems(currentState);
 
     sortControl.selectedIndex = 0;
 }
@@ -151,11 +166,16 @@ sortControl.addEventListener("change", (event) => {
                 currentState.sort((a, b) => a.price - b.price);
                 break;
             }
+        case "rating":
+            {
+                currentState.sort((a, b) => b.rating - a.rating);
+                break;
+            }
         case "alphabet":
             {
                 currentState.sort((a, b) => sortByAlphabet(a, b));
                 break;
             }
     }
-    separationItems(currentState);
+    separateItems(currentState);
 });
